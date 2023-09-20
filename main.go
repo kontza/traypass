@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"embed"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -14,11 +16,28 @@ import (
 //go:embed all:frontend/dist
 var assets embed.FS
 
-type home struct{}
+const CMD_PREFIX = "/wails-go"
+
+type commandHandler func(context.Context, http.ResponseWriter, *http.Request)
+
+func getList(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+	payload := `
+	<ol>
+		<li>Eka</li>
+		<li>Toka</li>
+		<li>Kola</li>
+	</ol>
+	`
+	w.Write([]byte(payload))
+	runtime.LogInfo(ctx, ">>> List returned")
+}
 
 func main() {
 	// Create an instance of the app structure
 	app := NewApp()
+	handlers := map[string]commandHandler{
+		CMD_PREFIX + "/get-list": getList,
+	}
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -29,13 +48,15 @@ func main() {
 			Assets: assets,
 			Middleware: func(next http.Handler) http.Handler {
 				return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-					if strings.HasPrefix(r.URL.Path, "/wails-go") {
-						w.Write([]byte("Hello, World!"))
-						runtime.LogPrintf(app.ctx, ">>> Served a request")
+					if strings.HasPrefix(r.URL.Path, CMD_PREFIX) {
+						if handler, ok := handlers[r.URL.Path]; ok {
+							handler(app.ctx, w, r)
+						} else {
+							runtime.LogWarning(app.ctx, fmt.Sprintf("Unknown path: %v", r.URL.Path))
+						}
 					} else {
 						next.ServeHTTP(w, r)
 					}
-
 				})
 			},
 		},
