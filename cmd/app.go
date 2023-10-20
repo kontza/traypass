@@ -28,11 +28,11 @@ func NewApp() *App {
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 	var err error
-	a.listTemplate, err = template.New("entries").Parse(`<ol>
-			{{range .}}
-			<li>{{.}}</li>
-			{{end}}
-		</ol>`)
+	a.listTemplate, err = template.New("entries").Parse(`<select name="entries", id="secret", size="100">
+		{{range .}}
+			<option value="{{.}}">{{.}}</option>
+		{{end}}
+		</select>`)
 	if err != nil {
 		runtime.LogErrorf(a.ctx, "Template parsing failed: %v", err)
 	}
@@ -57,7 +57,8 @@ func (a *App) getList(ctx context.Context, w http.ResponseWriter, r *http.Reques
 				if relative, err = filepath.Rel(expanded, path); err != nil {
 					return err
 				}
-				entries = append(entries, relative)
+
+				entries = append(entries, strings.TrimSuffix(relative, filepath.Ext(relative)))
 			} else {
 				runtime.LogDebugf(a.ctx, ">>> IsFile %s", path)
 			}
