@@ -28,8 +28,8 @@ func NewApp() *App {
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 	var err error
-	a.listTemplate, err = template.New("entries").Parse(`<select name="entries", id="secret", size="100">
-		{{range .}}
+	a.listTemplate, err = template.New("entries").Parse(`<select name="entries", id="secret", size="{{.Count}}">
+		{{range .Entries}}
 			<option value="{{.}}">{{.}}</option>
 		{{end}}
 		</select>`)
@@ -40,7 +40,13 @@ func (a *App) startup(ctx context.Context) {
 
 // Return a list of found files.
 func (a *App) getList(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-	entries := []string{}
+	binding := struct {
+		Entries []string
+		Count   int
+	}{
+		Entries: []string{},
+		Count:   0,
+	}
 	expanded := os.ExpandEnv(appConfig.ScanDirectory)
 	filepath.WalkDir(expanded,
 		func(path string, de fs.DirEntry, err error) error {
@@ -58,13 +64,14 @@ func (a *App) getList(ctx context.Context, w http.ResponseWriter, r *http.Reques
 					return err
 				}
 
-				entries = append(entries, strings.TrimSuffix(relative, filepath.Ext(relative)))
+				binding.Entries = append(binding.Entries, strings.TrimSuffix(relative, filepath.Ext(relative)))
 			} else {
 				runtime.LogDebugf(a.ctx, ">>> IsFile %s", path)
 			}
 			return nil
 		})
-	if err := a.listTemplate.Execute(w, entries); err != nil {
+	binding.Count = len(binding.Entries)
+	if err := a.listTemplate.Execute(w, binding); err != nil {
 		runtime.LogErrorf(a.ctx, "Template execution failed: %v", err)
 		return
 	}
