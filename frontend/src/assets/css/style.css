@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+html {
+  height: 100%;
+}
+.big-select {
+  height: auto;
+  width: 100%;
+}

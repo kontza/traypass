@@ -46,7 +46,7 @@ func rootRunner(cmd *cobra.Command, args []string) {
 				})
 			},
 		},
-		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
+		BackgroundColour: &options.RGBA{R: 29, G: 35, B: 42, A: 1},
 		OnStartup:        app.startup,
 		Bind: []interface{}{
 			app,

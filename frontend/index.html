@@ -1,15 +1,28 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>waitwhat</title>
-    <link rel="stylesheet" href="src/style.css" />
-    <link rel="stylesheet" href="src/app.css" />
+    <link rel="stylesheet" href="src/assets/css/style.css" />
   </head>
   <body>
-    <div hx-get="/wails-go/get-list" hx-trigger="load">Main</div>
+    <div class="h-full" style="flex-direction: column; display: flex">
+      <input
+        placeholder="Enter search term (regex)"
+        class="w-screen flex-none input input-bordered"
+      />
+
+      <div
+        id="list-container"
+        class="w-screen"
+        hx-get="/wails-go/get-list"
+        hx-trigger="load"
+      >
+        Loading...
+      </div>
+    </div>
     <script src="./src/assets/htmx.min.js" type="module"></script>
-    <!-- <script src="./src/main.js" type="module"></script> -->
+    <script src="./src/main.js" type="module"></script>
   </body>
 </html>

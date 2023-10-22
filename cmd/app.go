@@ -28,7 +28,8 @@ func NewApp() *App {
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 	var err error
-	a.listTemplate, err = template.New("entries").Parse(`<select name="entries", id="secret", size="{{.Count}}">
+
+	a.listTemplate, err = template.New("entries").Parse(`<select class="select select-bordered big-select" name="entries", id="secret", size="{{.Count}}">
 		{{range .Entries}}
 			<option value="{{.}}">{{.}}</option>
 		{{end}}
