@@ -6,5 +6,5 @@ const calcSize = () => {
   const listSize = (window.innerHeight - inputHeight) / optionHeight
   htmx.findAll('select')[0].size = listSize
 }
+window.addEventListener('pageshow', calcSize)
 window.addEventListener('resize', calcSize)
-document.body.addEventListener('htmx:afterOnLoad', calcSize)
