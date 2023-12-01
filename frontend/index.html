@@ -10,9 +10,12 @@
     <div class="h-full" style="flex-direction: column; display: flex">
       <input
         placeholder="Enter search term (regex)"
+        name="filter"
         class="w-screen flex-none input input-bordered"
+        hx-post="/wails-go/filter"
+        hx-trigger="keyup delay:300ms"
+        hx-target="#list-container"
       />
-
       <div
         id="list-container"
         class="w-screen"

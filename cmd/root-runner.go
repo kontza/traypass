@@ -23,6 +23,7 @@ func rootRunner(cmd *cobra.Command, args []string) {
 	app := NewApp()
 	handlers := map[string]commandHandler{
 		CMD_PREFIX + "/get-list": app.getList,
+		CMD_PREFIX + "/filter":   app.filterList,
 	}
 
 	// Create application with options
