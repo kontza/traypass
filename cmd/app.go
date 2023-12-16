@@ -102,6 +102,9 @@ func (a *App) filterList(ctx context.Context, w http.ResponseWriter, r *http.Req
 				return nil
 			})
 		binding.Count = len(binding.Entries)
+		if binding.Count == 1 {
+			runtime.LogDebug(a.ctx, ">>> Single item, copy to clipboard")
+		}
 		if err := a.listTemplate.Execute(w, binding); err != nil {
 			runtime.LogErrorf(a.ctx, "Template execution failed: %v", err)
 			return
