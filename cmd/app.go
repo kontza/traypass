@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"context"
-	"html/template"
 	"io"
 	"io/fs"
 	"net/http"
@@ -16,8 +15,7 @@ import (
 
 // App struct
 type App struct {
-	ctx          context.Context
-	listTemplate *template.Template
+	ctx context.Context
 }
 
 const FILTER_PREFIX = "filter="
@@ -31,16 +29,6 @@ func NewApp() *App {
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
-	var err error
-
-	a.listTemplate, err = template.New("entries").Parse(`<select class="select select-bordered big-select" name="entries", id="secret", size="{{.Count}}">
-		{{range .Entries}}
-			<option value="{{.}}">{{.}}</option>
-		{{end}}
-		</select>`)
-	if err != nil {
-		runtime.LogErrorf(a.ctx, "Template parsing failed: %v", err)
-	}
 }
 
 // Return a list of found files.
@@ -61,13 +49,7 @@ func (a *App) filterList(ctx context.Context, w http.ResponseWriter, r *http.Req
 		} else {
 			pat = rePat
 		}
-		binding := struct {
-			Entries []string
-			Count   int
-		}{
-			Entries: []string{},
-			Count:   0,
-		}
+		var entries []string
 		expanded := os.ExpandEnv(appConfig.ScanDirectory)
 		filepath.WalkDir(expanded,
 			func(path string, de fs.DirEntry, err error) error {
@@ -88,27 +70,21 @@ func (a *App) filterList(ctx context.Context, w http.ResponseWriter, r *http.Req
 					if pat != nil {
 						if pat.Match([]byte(path)) {
 							runtime.LogDebugf(a.ctx, ">>> Pattern matched, adding %s", path)
-							binding.Entries = append(binding.Entries, strings.TrimSuffix(relative, filepath.Ext(relative)))
+							entries = append(entries, strings.TrimSuffix(relative, filepath.Ext(relative)))
 						} else {
 							runtime.LogDebugf(a.ctx, ">>> Pattern NOT matched, bypass %s", path)
 						}
 					} else {
 						runtime.LogDebugf(a.ctx, ">>> No filter, adding %s", path)
-						binding.Entries = append(binding.Entries, strings.TrimSuffix(relative, filepath.Ext(relative)))
+						entries = append(entries, strings.TrimSuffix(relative, filepath.Ext(relative)))
 					}
 				} else {
 					runtime.LogDebugf(a.ctx, ">>> IsFile %s", path)
 				}
 				return nil
 			})
-		binding.Count = len(binding.Entries)
-		if binding.Count == 1 {
-			runtime.LogDebug(a.ctx, ">>> Single item, copy to clipboard")
-		}
-		if err := a.listTemplate.Execute(w, binding); err != nil {
-			runtime.LogErrorf(a.ctx, "Template execution failed: %v", err)
-			return
-		}
+		listComponent := generateList(entries)
+		listComponent.Render(a.ctx, w)
 		return
 	}
 }
