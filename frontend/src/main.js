@@ -8,3 +8,11 @@ const calcSize = () => {
 }
 window.addEventListener('pageshow', calcSize)
 window.addEventListener('resize', calcSize)
+
+document.addEventListener('keyup', (e) => {
+  if (e.key === 'Escape') {
+    const input = document.getElementsByName('filter').item(0)
+    input.focus()
+    input.value = ''
+  }
+})
