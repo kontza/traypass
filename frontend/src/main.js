@@ -9,10 +9,14 @@ const calcSize = () => {
 window.addEventListener('pageshow', calcSize)
 window.addEventListener('resize', calcSize)
 
+const ESC = 'Escape'
+
 document.addEventListener('keyup', (e) => {
-  if (e.key === 'Escape') {
+  if (e.key === ESC) {
     const input = document.getElementsByName('filter').item(0)
+    if (document.activeElement.nodeName === 'INPUT') {
+      input.value = ''
+    }
     input.focus()
-    input.value = ''
   }
 })
