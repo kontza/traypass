@@ -20,6 +20,7 @@ var assets embed.FS
 type AppConfig struct {
 	ScanDirectory string `mapstructure:"scan-directory"`
 	cfgFile       string
+	verbose       bool
 }
 
 var appConfig AppConfig
@@ -46,6 +47,7 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVar(&appConfig.cfgFile, "config", "", fmt.Sprintf("config file (default is $HOME/.%s.yaml)", rootCmd.Use))
 	rootCmd.Flags().StringVarP(&appConfig.ScanDirectory, "scan-directory", "d", "$HOME/.local/share/gopass/stores", "The directory to scan for GPG files")
+	rootCmd.Flags().BoolVarP(&appConfig.verbose, "verbose", "v", false, "Show verbose logging information.")
 
 	viper.BindPFlags(rootCmd.Flags())
 }
