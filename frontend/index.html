@@ -7,25 +7,28 @@
     <link rel="stylesheet" href="src/assets/css/style.css" />
   </head>
   <body>
-    <div class="h-full" style="flex-direction: column; display: flex">
-      <input
-        placeholder="Enter search term (regex)"
-        name="filter"
-        class="w-screen flex-none input input-bordered"
-        hx-post="/wails-go/filter"
-        hx-trigger="keyup delay:300ms"
-        hx-target="#list-container"
-        autofocus
-      />
-      <div
-        id="list-container"
-        class="w-screen"
-        hx-get="/wails-go/get-list"
-        hx-trigger="load"
-      >
+    <input
+      placeholder="Enter search term"
+      name="filter"
+      id="filter"
+      hx-post="/wails-go/filter"
+      hx-trigger="keyup delay:300ms"
+      hx-target="#list-container"
+      autofocus
+    />
+    <fieldset id="secret" hx-get="/wails-go/get-list" hx-trigger="load">
+      <label
+        ><input
+          type="radio"
+          class="selection"
+          id="huey"
+          name="drone"
+          value="huey"
+          checked
+        />
         Loading...
-      </div>
-    </div>
+      </label>
+    </fieldset>
     <script src="./src/assets/htmx.min.js" type="module"></script>
     <script src="./src/main.js" type="module"></script>
   </body>

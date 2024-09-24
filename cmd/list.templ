@@ -1,13 +1,19 @@
 package cmd
 
-import "strconv"
 
 templ generateList(entries []string) {
-	<select class="select select-bordered big-select" name="entries" id="secret" size={ strconv.Itoa(len(entries)) }>
-		for _, entry := range entries {
-			<option value={ entry }>{ entry }</option>
-		}
-	</select>
+	for _, entry := range entries {
+		<label>
+			<input
+				type="radio"
+				class="selection"
+				name="secret"
+				value={entry}
+				checked
+				/>
+			{entry}
+		</label>
+	}
 }
 
 // vim: set ft=go

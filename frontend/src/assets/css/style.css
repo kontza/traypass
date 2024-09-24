@@ -1,10 +1,29 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 html {
   height: 100%;
 }
 .big-select {
   height: auto;
   width: 100%;
+}
+#filter {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2em;
+}
+#secret {
+  margin-top: 2em;
+  height: calc(100vh - 2em);
+  overflow-y: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.selection input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
 }
