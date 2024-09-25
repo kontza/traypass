@@ -30,33 +30,33 @@ func generateList(entries []string) templ.Component {
 		}
 		ctx = templ.ClearChildren(ctx)
 		for _, entry := range entries {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<label><input type=\"radio\" class=\"selection\" name=\"secret\" value=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"selection\" name=\"secret\" tabindex=\"0\" type=\"submit\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(entry)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `cmd/list.templ`, Line: 11, Col: 16}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `cmd/list.templ`, Line: 11, Col: 15}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" checked> ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(entry)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `cmd/list.templ`, Line: 14, Col: 9}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `cmd/list.templ`, Line: 13, Col: 8}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</label>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -36,11 +36,18 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
+// Decrypt the given secret.
+func (a *App) decrypt(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+	secret := strings.TrimSpace(r.FormValue("secret"))
+	runtime.LogInfof(ctx, "Would decrypt: %s", secret)
+}
+
 // Return a list of found files.
 func (a *App) getList(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	a.filterList(ctx, w, r)
 }
 
+// Scan for secrets and filter them returning a list of matches.
 func (a *App) filterList(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	rawFilter := strings.TrimSpace(r.FormValue("filter"))
 	filterString := strings.ReplaceAll(strings.Replace(rawFilter, FILTER_PREFIX, "", 1), " ", ".*")

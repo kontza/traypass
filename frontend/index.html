@@ -1,35 +1,26 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<!doctype html>
+<html lang="en">
   <head>
-    <meta charset="UTF-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>waitwhat</title>
-    <link rel="stylesheet" href="src/assets/css/style.css" />
-  </head>
-  <body>
-    <input
-      placeholder="Enter search term"
-      name="filter"
-      id="filter"
-      hx-post="/wails-go/filter"
-      hx-trigger="keyup delay:300ms"
-      hx-target="#list-container"
-      autofocus
-    />
-    <fieldset id="secret" hx-get="/wails-go/get-list" hx-trigger="load">
-      <label
-        ><input
-          type="radio"
-          class="selection"
-          id="huey"
-          name="drone"
-          value="huey"
-          checked
-        />
-        Loading...
-      </label>
-    </fieldset>
+    <link rel="stylesheet" href="src/assets/css/style.css" type="text/css" />
     <script src="./src/assets/htmx.min.js" type="module"></script>
     <script src="./src/main.js" type="module"></script>
+  </head>
+  <body>
+    <form action="/wails-go/decrypt">
+      <input
+        placeholder="Enter search term"
+        name="filter"
+        id="filter"
+        hx-post="/wails-go/filter"
+        hx-trigger="keyup delay:300ms"
+        hx-target="#button-container"
+        autofocus
+      />
+      <div id="button-container" hx-get="/wails-go/get-list" hx-trigger="load">
+        <button>Loading...</button>
+      </div>
+    </form>
   </body>
 </html>

@@ -1,29 +1,28 @@
 html {
   height: 100%;
 }
-.big-select {
-  height: auto;
-  width: 100%;
-}
 #filter {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   height: 2em;
+  font-size: 1em;
 }
-#secret {
-  margin-top: 2em;
-  height: calc(100vh - 2em);
+#button-container {
+  margin-top: 2.4em;
+  height: calc(100vh - 2.4em);
   overflow-y: auto;
   width: 100%;
   display: flex;
+  padding: 0;
   flex-direction: column;
 }
-.selection input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
+.selection {
+  text-align: start;
+  border: none;
+  padding: 0;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  font-size: 1em;
 }

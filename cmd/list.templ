@@ -3,16 +3,15 @@ package cmd
 
 templ generateList(entries []string) {
 	for _, entry := range entries {
-		<label>
-			<input
-				type="radio"
-				class="selection"
-				name="secret"
-				value={entry}
-				checked
-				/>
-			{entry}
-		</label>
+		<button
+			class="selection"
+			name="secret"
+			tabindex="0"
+			type="submit"
+			value={entry}
+			>
+		{entry}
+		</button>
 	}
 }
 

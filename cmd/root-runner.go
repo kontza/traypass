@@ -24,6 +24,7 @@ func rootRunner(cmd *cobra.Command, args []string) {
 	handlers := map[string]commandHandler{
 		CMD_PREFIX + "/get-list": app.getList,
 		CMD_PREFIX + "/filter":   app.filterList,
+		CMD_PREFIX + "/decrypt":  app.decrypt,
 	}
 
 	// Create application with options
