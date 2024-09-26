@@ -1,16 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 html {
   height: 100%;
 }
+button:focus {
+  outline-width: 1px;
+  outline-style: dotted;
+}
+#filter:focus {
+  outline-style: none;
+}
 #filter {
   position: fixed;
-  top: 0;
+  top: 2px;
   left: 0;
   right: 0;
   height: 2em;
   font-size: 1em;
+  padding-left: 5px;
+  border-radius: 0px !important;
 }
 #button-container {
-  margin-top: 2.4em;
+  margin-top: 2.1em;
   height: calc(100vh - 2.4em);
   overflow-y: auto;
   width: 100%;
@@ -21,8 +33,10 @@ html {
 .selection {
   text-align: start;
   border: none;
+  margin-top: 4px;
   padding: 0;
   padding-top: 2px;
   padding-bottom: 2px;
   font-size: 1em;
+  padding-left: 5px;
 }
