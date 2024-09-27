@@ -40,6 +40,8 @@ func (a *App) startup(ctx context.Context) {
 func (a *App) decrypt(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	secret := strings.TrimSpace(r.FormValue("secret"))
 	runtime.LogInfof(ctx, "Would decrypt: %s", secret)
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(""))
 }
 
 // Return a list of found files.
@@ -96,5 +98,4 @@ func (a *App) filterList(ctx context.Context, w http.ResponseWriter, r *http.Req
 		})
 	listComponent := generateList(entries)
 	listComponent.Render(a.ctx, w)
-	return
 }
