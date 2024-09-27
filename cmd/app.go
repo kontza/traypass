@@ -2,9 +2,12 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"io/fs"
 	"net/http"
 	"os"
+	"os/exec"
+	"path"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -19,6 +22,7 @@ type App struct {
 }
 
 const FILTER_PREFIX = "filter="
+const GPG_EXT = ".gpg"
 
 // NewApp creates a new App application struct
 func NewApp() *App {
@@ -39,7 +43,27 @@ func (a *App) startup(ctx context.Context) {
 // Decrypt the given secret.
 func (a *App) decrypt(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	secret := strings.TrimSpace(r.FormValue("secret"))
-	runtime.LogInfof(ctx, "Would decrypt: %s", secret)
+	var sb strings.Builder
+	sb.WriteString(path.Join(os.ExpandEnv(appConfig.ScanDirectory), secret))
+	sb.WriteString(GPG_EXT)
+	secretFile := sb.String()
+	runtime.LogDebugf(ctx, "Will decrypt: %s", secretFile)
+	var gpg string
+	if path, err := exec.LookPath("gpg"); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "GPG not found: %v", err)
+		return
+	} else {
+		gpg = path
+	}
+	if out, err := exec.Command(gpg, "--decrypt", secretFile).Output(); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "Failed to run GPG: %v", err)
+		return
+	} else {
+		parts := strings.Split(string(out), "\n")
+		println(parts[0])
+	}
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(""))
 }
@@ -73,7 +97,7 @@ func (a *App) filterList(ctx context.Context, w http.ResponseWriter, r *http.Req
 				}
 				return nil
 			}
-			if filepath.Ext(de.Name()) == ".gpg" {
+			if filepath.Ext(de.Name()) == GPG_EXT {
 				var relative string
 				if relative, err = filepath.Rel(expanded, path); err != nil {
 					return err
