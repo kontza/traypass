@@ -29,7 +29,7 @@ func rootRunner(cmd *cobra.Command, args []string) {
 
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:  "waitwhat",
+		Title:  "traypass",
 		Width:  1024,
 		Height: 768,
 		AssetServer: &assetserver.Options{

@@ -5,7 +5,7 @@ package main
 
 import (
 	"embed"
-	"waitwhat/cmd"
+	"traypass/cmd"
 )
 
 //go:embed all:frontend/dist

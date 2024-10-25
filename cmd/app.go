@@ -50,15 +50,20 @@ func (a *App) decrypt(ctx context.Context, w http.ResponseWriter, r *http.Reques
 	runtime.LogDebugf(ctx, "Will decrypt: %s", secretFile)
 	var gpg string
 	if path, err := exec.LookPath("gpg"); err != nil {
+		msg := fmt.Sprintf("Failed to run GPG: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "GPG not found: %v", err)
+		runtime.LogError(ctx, msg)
+		fmt.Fprint(w, msg)
 		return
 	} else {
 		gpg = path
 	}
+	runtime.LogInfof(ctx, "Going to run '%s --decrypt %s'", gpg, secretFile)
 	if out, err := exec.Command(gpg, "--decrypt", secretFile).Output(); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "Failed to run GPG: %v", err)
+		msg := fmt.Sprintf("Failed to run GPG: %v", err)
+		runtime.LogError(ctx, msg)
+		fmt.Fprint(w, msg)
 		return
 	} else {
 		parts := strings.Split(string(out), "\n")
@@ -86,8 +91,7 @@ func (a *App) filterList(ctx context.Context, w http.ResponseWriter, r *http.Req
 		runtime.LogDebugf(a.ctx, ">>> Created a regex pattern for '%s'", filterString)
 	}
 	var entries []string
-	expanded := os.ExpandEnv(appConfig.ScanDirectory)
-	filepath.WalkDir(expanded,
+	filepath.WalkDir(appConfig.ScanDirectory,
 		func(path string, de fs.DirEntry, err error) error {
 			if de.IsDir() {
 				runtime.LogDebugf(a.ctx, ">>> IsDir %s", path)
@@ -99,7 +103,7 @@ func (a *App) filterList(ctx context.Context, w http.ResponseWriter, r *http.Req
 			}
 			if filepath.Ext(de.Name()) == GPG_EXT {
 				var relative string
-				if relative, err = filepath.Rel(expanded, path); err != nil {
+				if relative, err = filepath.Rel(appConfig.ScanDirectory, path); err != nil {
 					return err
 				}
 

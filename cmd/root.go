@@ -1,5 +1,5 @@
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+Copyright © 2023 Juha Ruotsalainen <juha.ruotsalainen@iki.fi>
 */
 package cmd
 
@@ -9,6 +9,7 @@ import (
 	"log/slog"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -27,8 +28,8 @@ var appConfig AppConfig
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "waitwhat",
-	Short: "Trials on Wails + HTMX",
+	Use:   "traypass",
+	Short: "A simple tray being for Gopass",
 	Run:   rootRunner,
 }
 
@@ -80,4 +81,7 @@ func initConfig() {
 			os.Exit(1)
 		}
 	}
+	scanDirectory := strings.Replace(appConfig.ScanDirectory, "~/", "$HOME/", 1)
+	appConfig.ScanDirectory = os.ExpandEnv(scanDirectory)
+	slog.Info("Configured", "ScanDirectory", appConfig.ScanDirectory)
 }
